@@ -44,11 +44,26 @@ You might be surprised by how close these numbers are. In fact, without special 
 
 ```python
 from monopoly_probability_sim import *
-game = BaseMonopolySim()
-game.averageOverNPlays(10, 10000) # choose higher numbers for a slower but more accurate result
+game = BaseMonopolySim(42) # use a seed of 42 to match my results. Leave blank for random results
+game.averageOverNPlays(100, 100000) # choose higher numbers for a slower but more accurate result
 print(game)
 ```
-This plays the game with no monopoly elements accept a blank board and a die. Without any special rules to bias things, all tiles eventually average out to the same frequency.
+This prints
+```
+|2.4995%|2.5037%|2.4944%|2.5002%|2.4985%|2.4976%|2.5033%|2.5001%|2.4976%|2.5032%|2.4973%|
+|2.5051%|                                                                       |2.5016%|
+|2.5027%|                                                                       |2.4986%|
+|2.5027%|                                                                       |2.4943%|
+|2.4942%|                                                                       |2.5014%|
+|2.4983%|                                                                       |2.5003%|
+|2.4964%|                                                                       |2.4999%|
+|2.5052%|                                                                       |2.5019%|
+|2.4953%|                                                                       |2.4916%|
+|2.4980%|                                                                       |2.5082%|
+|2.5115%|2.5014%|2.4965%|2.4973%|2.5035%|2.5052%|2.4983%|2.5005%|2.4996%|2.4921%|2.5033%|
+```
+
+This plays the game with no monopoly elements accept a blank board and a die. Without any special rules to bias things, all tiles eventually average out to the same frequency. You can see that the largest difference is less than 1/10 of a percent.
 
 Rolling doubles three times in a row sends you to jail, which means that tiles directly after jail get a boost in popularity. Also, cards like 'go to boardwalk' slightly increase the popularity of boardwalk, which has a similar effect on spots after boardwalk. This has a cyclic effect -- since 7 is the most common die roll, and there is a 'Chance' tile 7 steps after jail, that tile gets landed on disproportionally, sometimes sending you to jail. This increases the chances even more of going to jail and landing on Chance again. All these mechanisms mean that in a real game, some tiles are landed on more frequently than others.
 
@@ -56,4 +71,6 @@ However, the difference in frequency is small. Going to jail is rare: you have t
 
 If you weren't surprised by how close the numbers are, maybe you are surprised by how far apart they are. While the difference between 2.0201% and 3.0126% may not seem like much, it means the best tile is almost 1.5 times as good as the worst. From a monetary perspective, if you were charging the same rent on both tiles (unlikely) you would get 1.5 times as much money from the better tile. Those are game winning numbers. In reality, the red tiles give you more in rent per visit as well as being more frequented. The browns are clearly worse.
 
-My biggest takeaway is how good the railroads are! While they aren't as frequented as the reds or oranges, they come in at #3 in the list. Along with the other in game benefits (cost vs rent, no need to buy houses) they seem liking game winnng properties to me. 
+My biggest takeaway is how good the railroads are! While they aren't as frequented as the reds or oranges, they come in at #3 in the list. Along with the other in game benefits (cost vs rent, no need to buy houses) they seem liking game winnng properties to me.
+
+I hope you appreciate these numbers and the code that created them. Please feel free to submit a pull request or create an issue if changes are needed.
