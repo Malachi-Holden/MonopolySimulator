@@ -5,7 +5,7 @@ This is an accurate model for estimating the frequency of landing on each tile o
 It is not necessary to use multiple players, since players don't have any affect on each other's movement. It is equivalent to play multiple games with one player.
 
 
-# Results
+## Results
 These are the results after running 1000 games of 1000000 moves each. Real games may differ because of random variations in dice rolls, especially since real games play fewer rounds than 1000000. However these are close to the expected results over a large number of games
 
 ```
@@ -33,3 +33,27 @@ dark blue: 4.5567%. Average: 2.2784%
 railroads: 10.7654%. Average: 2.6913%
 utilities: 5.1187%. Average: 2.5593%
 ```
+### How to read the results
+The table of percentages is a representation of a monopoly board, with go on the top left and preceeding clockwise. So 'Jail' is on the top right, 'Free Parking' on the bottom right, and 'Go to Jail' on the bottom left. Each number represents the percentage of hits that tile got out of all the tiles landed on. So if a player made 100 moves, and free parking was landed on 7 times, the bottom right corner would say 7.0000%. Adding up all the tiles should result in 100%, although this may be slightly different because of rounding errors.
+
+The list of colors below just recombines the data from the table and organizes it by monopoly. This information might be useful when deciding whether to make a trade.
+
+## Interpretation
+
+You might be surprised by how close these numbers are. In fact, without special cards or elements like going to jail, all of the tiles get landed on almost exactly the same amount. You can see this for yourself with the following code:
+
+```python
+from monopoly_probability_sim import *
+game = BaseMonopolySim()
+game.averageOverNPlays(10, 10000) # choose higher numbers for a slower but more accurate result
+print(game)
+```
+This plays the game with no monopoly elements accept a blank board and a die. Without any special rules to bias things, all tiles eventually average out to the same frequency.
+
+Rolling doubles three times in a row sends you to jail, which means that tiles directly after jail get a boost in popularity. Also, cards like 'go to boardwalk' slightly increase the popularity of boardwalk, which has a similar effect on spots after boardwalk. This has a cyclic effect -- since 7 is the most common die roll, and there is a 'Chance' tile 7 steps after jail, that tile gets landed on disproportionally, sometimes sending you to jail. This increases the chances even more of going to jail and landing on Chance again. All these mechanisms mean that in a real game, some tiles are landed on more frequently than others.
+
+However, the difference in frequency is small. Going to jail is rare: you have to either chance to land on the tile, get three doubles in a row (1/216 chance of three die rolls getting three doubles), or draw a go to jail card. The other effects, like getting sent to boardwalk, are even rarer. This is why "bad" tiles like Baltic Avenue are still less than a percentage point away from "good" tiles like Kentucky Avenue.
+
+If you weren't surprised by how close the numbers are, maybe you are surprised by how far apart they are. While the difference between 2.0201% and 3.0126% may not seem like much, it means the best tile is almost 1.5 times as good as the worst. From a monetary perspective, if you were charging the same rent on both tiles (unlikely) you would get 1.5 times as much money from the better tile. Those are game winning numbers. In reality, the red tiles give you more in rent per visit as well as being more frequented. The browns are clearly worse.
+
+My biggest takeaway is how good the railroads are! While they aren't as frequented as the reds or oranges, they come in at #3 in the list. Along with the other in game benefits (cost vs rent, no need to buy houses) they seem liking game winnng properties to me. 
